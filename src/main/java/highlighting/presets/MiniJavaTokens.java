@@ -19,44 +19,31 @@ public final class MiniJavaTokens {
   public static List<Token> defaultTokens() {
     return List.of(
         // Example: string literals (students should define further tokens below)
-        //Token.of(Pattern.compile("\"([^\"\\\\]|\\\\.)*\""), MiniJavaColours.STRING_LITERAL_COLOUR),
+        // Token.of(Pattern.compile("\"([^\"\\\\]|\\\\.)*\""),
+        // MiniJavaColours.STRING_LITERAL_COLOUR),
 
         // Javadoc comments: /** ... */
         Token.of(
-            Pattern.compile("/\\*\\*([\\s\\S]*?)\\*/"),
-            MiniJavaColours.JAVADOC_COMMENT_COLOUR),
+            Pattern.compile("/\\*\\*([\\s\\S]*?)\\*/"), MiniJavaColours.JAVADOC_COMMENT_COLOUR),
 
         // Multi-line comments: /* ... */
-        Token.of(
-            Pattern.compile("/\\*([\\s\\S]*?)\\*/"),
-            MiniJavaColours.BLOCK_COMMENT_COLOUR),
+        Token.of(Pattern.compile("/\\*([\\s\\S]*?)\\*/"), MiniJavaColours.BLOCK_COMMENT_COLOUR),
 
         // Single-line comments: // ...
-        Token.of(
-            Pattern.compile("//.*"),
-            MiniJavaColours.LINE_COMMENT_COLOUR),
+        Token.of(Pattern.compile("//.*"), MiniJavaColours.LINE_COMMENT_COLOUR),
 
         // String literals: "..."
-        Token.of(
-            Pattern.compile("\"([^\"\\\\]|\\\\.)*\""),
-            MiniJavaColours.STRING_LITERAL_COLOUR),
+        Token.of(Pattern.compile("\"([^\"\\\\]|\\\\.)*\""), MiniJavaColours.STRING_LITERAL_COLOUR),
 
         // Character literals: 'a', '\n', etc.
-        Token.of(
-            Pattern.compile("'([^'\\\\]|\\\\.)'"),
-            MiniJavaColours.CHAR_LITERAL_COLOUR),
+        Token.of(Pattern.compile("'([^'\\\\]|\\\\.)'"), MiniJavaColours.CHAR_LITERAL_COLOUR),
 
         // Annotations: @Override, @Test, ...
-        Token.of(
-            Pattern.compile("@[A-Za-z_-]+"),
-            MiniJavaColours.ANNOTATION_COLOUR),
+        Token.of(Pattern.compile("@[A-Za-z_-]+"), MiniJavaColours.ANNOTATION_COLOUR),
 
         // Keywords
         Token.of(
-            Pattern.compile(
-                "\\b(package|import|class|public|private|final|return|null|new)\\b"),
-            MiniJavaColours.KEYWORD_COLOUR)
-
-        );
+            Pattern.compile("\\b(package|import|class|public|private|final|return|null|new)\\b"),
+            MiniJavaColours.KEYWORD_COLOUR));
   }
 }
