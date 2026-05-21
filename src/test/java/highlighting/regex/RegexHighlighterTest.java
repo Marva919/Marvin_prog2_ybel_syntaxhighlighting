@@ -32,23 +32,23 @@ public class RegexHighlighterTest {
   // -------------------------------------------------------------------------
 
   @Test
-  void collectMatches_emptyText_returnsEmptyList() {
+  void collect_matches_empty_text_returns_empty_list() {
     assertTrue(raw("").isEmpty());
   }
 
   @Test
-  void collectMatches_noTokenMatch_returnsEmptyList() {
+  void collect_matches_no_token_match_returns_empty_list() {
     assertTrue(raw("fooBar").isEmpty());
   }
 
   @Test
-  void collectMatches_singleKeyword_containsKeywordRegion() {
+  void collect_matches_single_keyword_contains_keyword_region() {
     assertTrue(
         raw("public").stream().anyMatch(r -> r.colour().equals(MiniJavaColours.KEYWORD_COLOUR)));
   }
 
   @Test
-  void collectMatches_keywordInsideLineComment_bothPresentBeforeResolution() {
+  void collect_matches_keyword_inside_line_comment_both_present_before_resolution() {
     var regions = raw("// public");
     assertTrue(
         regions.stream().anyMatch(r -> r.colour().equals(MiniJavaColours.LINE_COMMENT_COLOUR)));
@@ -56,7 +56,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
-  void collectMatches_javadocMatchedByBothTokens_bothPresentBeforeResolution() {
+  void collect_matches_javadoc_matched_by_both_tokens_both_present_before_resolution() {
     var regions = raw("/** javadoc */");
     assertTrue(
         regions.stream().anyMatch(r -> r.colour().equals(MiniJavaColours.JAVADOC_COMMENT_COLOUR)));
@@ -69,35 +69,35 @@ public class RegexHighlighterTest {
   // -------------------------------------------------------------------------
 
   @Test
-  void resolveConflicts_keywordInsideLineComment_commentWins() {
+  void resolve_conflicts_keyword_inside_line_comment_comment_wins() {
     var result = compute("// public");
     assertEquals(1, result.size());
     assertEquals(MiniJavaColours.LINE_COMMENT_COLOUR, result.get(0).colour());
   }
 
   @Test
-  void resolveConflicts_keywordInsideBlockComment_commentWins() {
+  void resolve_conflicts_keyword_inside_block_comment_comment_wins() {
     var result = compute("/* return null */");
     assertEquals(1, result.size());
     assertEquals(MiniJavaColours.BLOCK_COMMENT_COLOUR, result.get(0).colour());
   }
 
   @Test
-  void resolveConflicts_javadocVsBlockComment_javadocWins() {
+  void resolve_conflicts_javadoc_vs_block_comment_javadoc_wins() {
     var result = compute("/** This is javadoc */");
     assertEquals(1, result.size());
     assertEquals(MiniJavaColours.JAVADOC_COMMENT_COLOUR, result.get(0).colour());
   }
 
   @Test
-  void resolveConflicts_keywordInsideString_stringWins() {
+  void resolve_conflicts_keyword_inside_string_string_wins() {
     var result = compute("\"return\"");
     assertEquals(1, result.size());
     assertEquals(MiniJavaColours.STRING_LITERAL_COLOUR, result.get(0).colour());
   }
 
   @Test
-  void resolveConflicts_manualAdjacentIntervals_bothKept() {
+  void resolve_conflicts_manual_adjacent_intervals_both_kept() {
     var input =
         List.of(new HighlightRegion(0, 5, Color.BLUE), new HighlightRegion(5, 10, Color.RED));
     var result = highlighter.resolveConflicts(input);
@@ -106,7 +106,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
-  void resolveConflicts_manualOverlappingIntervals_firstWins() {
+  void resolve_conflicts_manual_overlapping_intervals_first_wins() {
     var input =
         List.of(new HighlightRegion(0, 10, Color.BLUE), new HighlightRegion(5, 15, Color.RED));
     var result = highlighter.resolveConflicts(input);
@@ -115,7 +115,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
-  void resolveConflicts_containedInterval_outerWins() {
+  void resolve_conflicts_contained_interval_outer_wins() {
     var input =
         List.of(new HighlightRegion(0, 20, Color.BLUE), new HighlightRegion(5, 10, Color.RED));
     var result = highlighter.resolveConflicts(input);
@@ -124,8 +124,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
-  void resolveConflicts_threeRegions_overlappingMiddleDiscarded() {
-    // [0,5) kept; [4,8) overlaps → discarded; [5,10) adjacent to first → kept
+  void resolve_conflicts_three_regions_overlapping_middle_discarded() {
     var input =
         List.of(
             new HighlightRegion(0, 5, Color.BLUE),
@@ -142,26 +141,26 @@ public class RegexHighlighterTest {
   // -------------------------------------------------------------------------
 
   @Test
-  void endToEnd_emptyString_noRegions() {
+  void end_to_end_empty_string_no_regions() {
     assertTrue(compute("").isEmpty());
   }
 
   @Test
-  void endToEnd_twoSeparateKeywords_bothColoured() {
+  void end_to_end_two_separate_keywords_both_coloured() {
     var result = compute("public class");
     assertEquals(2, result.size());
     assertEquals(MiniJavaColours.KEYWORD_COLOUR, result.get(0).colour());
   }
 
   @Test
-  void endToEnd_annotationAndKeyword_bothColoured() {
+  void end_to_end_annotation_and_keyword_both_coloured() {
     var result = compute("@Override\npublic void foo() {}");
     assertTrue(result.stream().anyMatch(r -> r.colour().equals(MiniJavaColours.ANNOTATION_COLOUR)));
     assertTrue(result.stream().anyMatch(r -> r.colour().equals(MiniJavaColours.KEYWORD_COLOUR)));
   }
 
   @Test
-  void endToEnd_noRegionsOverlapInFinalResult() {
+  void end_to_end_no_regions_overlap_in_final_result() {
     var result = compute("public class Foo { /* block */ private final String s = \"hello\"; }");
     for (int i = 0; i < result.size() - 1; i++) {
       assertTrue(result.get(i).end() <= result.get(i + 1).start());
@@ -169,7 +168,7 @@ public class RegexHighlighterTest {
   }
 
   @Test
-  void endToEnd_resultIsSortedByStart() {
+  void end_to_end_result_is_sorted_by_start() {
     var result = compute("import java.util.List;\npublic class Foo {}");
     for (int i = 0; i < result.size() - 1; i++) {
       assertTrue(result.get(i).start() <= result.get(i + 1).start());
